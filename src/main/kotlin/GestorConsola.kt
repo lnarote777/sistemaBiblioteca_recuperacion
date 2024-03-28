@@ -47,5 +47,11 @@ object GestorConsola {
         val id = pedirOpcion().toInt()
         return id
     }
+
+    fun pedirNombreUsuario(): String{
+        mostrarMensaje("Nombre usuario:")
+        val nombre = respuesta()
+        return nombre
+    }
 }
 

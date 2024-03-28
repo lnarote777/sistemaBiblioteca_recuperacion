@@ -2,8 +2,8 @@ package org.example
 
 class GestorBiblioteca {
     private val catalogo = mutableListOf<Libro>()
-    private val registroPrestamos = mutableMapOf<Int, String>()
     private val consola = GestorConsola
+    private val prestamos = RegistroPrestamos()
 
     fun agregarLibroCatalogo(){
         val id = UtilidadesBiblioteca.generarId()
@@ -32,15 +32,17 @@ class GestorBiblioteca {
 
     fun buscarLibro(id: Int) = catalogo.find { libro: Libro -> libro.id == id }
 
-    fun prestarLibro(id: Int){
+    fun prestarLibro(id: Int, usuario: Usuario){
         val libro = buscarLibro(id)
 
         if (libro != null){
             if (libro.estado == Estado.DISPONIBLE){
                 libro.estado = Estado.PRESTADO
-                registroPrestamos[libro.id] = "Libro prestado"
+
+                usuario.agregarLibroPrestado(libro)
+                prestamos.registrarPrestamo(libro, usuario)
             }else{
-                consola.mostrarMensaje("El libro: ${libro.titulo} ya está prestado.")
+                consola.mostrarMensaje("El libro: '${libro.titulo}' ya está prestado.")
             }
         }else{
             consola.mostrarMensaje("No se encontró ningún libro.")
@@ -48,15 +50,17 @@ class GestorBiblioteca {
 
     }
 
-    fun devolverLibro(id: Int){
+    fun devolverLibro(id: Int, usuario: Usuario){
         val libro = buscarLibro(id)
 
         if (libro != null){
             if (libro.estado == Estado.PRESTADO){
                 libro.estado = Estado.DISPONIBLE
-                registroPrestamos[libro.id] = "Libro devuelto"
+
+                usuario.eliminarLibroPrestado(libro)
+                prestamos.devolverLibro(libro, usuario)
             }else{
-                consola.mostrarMensaje("El libro: ${libro.titulo} no ha sido prestado todavía.")
+                consola.mostrarMensaje("El libro: '${libro.titulo}' no ha sido prestado todavía.")
             }
         }else{
             consola.mostrarMensaje("No se encontró ningún libro.")
@@ -69,9 +73,9 @@ class GestorBiblioteca {
 
         if (libro != null) {
             if (libro.estado == Estado.DISPONIBLE){
-                consola.mostrarMensaje("El libro: ${libro.titulo} se encuentra disponible en la biblioteca.")
+                consola.mostrarMensaje("El libro: '${libro.titulo}' se encuentra disponible en la biblioteca.")
             }else{
-                consola.mostrarMensaje("El libro: ${libro.titulo} ha sido prestado y aun no se ha devuelto.")
+                consola.mostrarMensaje("El libro: '${libro.titulo}' ha sido prestado y aun no se ha devuelto.")
             }
         }else{
             consola.mostrarMensaje("No se encuentra ningún libro.")

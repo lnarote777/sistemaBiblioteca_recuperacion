@@ -21,7 +21,7 @@ class Menu(val biblioteca : GestorBiblioteca){
                 "3" -> {
                     biblioteca.mostrarLibrosDisponibles()
                     val id = consola.pedirId()
-                    biblioteca.prestarLibro(id)
+                    biblioteca.prestarLibro(id, )
                 }
                 "4" -> {
                     biblioteca.mostrarLibrosPrestados()
