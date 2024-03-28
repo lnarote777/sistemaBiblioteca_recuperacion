@@ -28,7 +28,4 @@ fun main() {
 
     //mostrar libros
     biblioteca.mostrarLibros()
-
-
-
 }
