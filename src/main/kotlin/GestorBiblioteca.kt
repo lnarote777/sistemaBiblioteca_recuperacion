@@ -2,21 +2,38 @@ package org.example
 
 class GestorBiblioteca {
     private val catalogo = mutableListOf<Libro>()
-    private val registroPrestamos = mutableMapOf<String, String>()
-    private val consola = GestorConsola()
+    private val registroPrestamos = mutableMapOf<Int, String>()
+    private val consola = GestorConsola
 
-    fun agregarLibroCatalogo(libro: Libro){
+    fun agregarLibroCatalogo(){
+        val id = UtilidadesBiblioteca.generarId()
+        val titulo = consola.pedirTitulo()
+        val autor = consola.pedirAutor()
+        val tematica = consola.pedirTematica()
+        val publicacion = consola.pedirPublicacion()
+
+
+        val libro = Libro(id, titulo, autor, publicacion, tematica)
         catalogo.add(libro)
+
+        consola.mostrarMensaje("Libro agregado correctamente.")
     }
 
-    fun eliminarLibroCatalogo(libro: Libro){
-        catalogo.remove(libro)
+    fun eliminarLibroCatalogo(id: Int){
+        val libro = buscarLibro(id)
+        if (libro != null){
+            catalogo.remove(libro)
+            consola.mostrarMensaje("Libro eliminado correctamente.")
+        }else{
+            consola.mostrarMensaje("No se encontró el libro con id: $id")
+        }
+
     }
 
-    private fun buscarLibro(id: String) = catalogo.find { libro: Libro -> libro.id == id }
+    fun buscarLibro(id: Int) = catalogo.find { libro: Libro -> libro.id == id }
 
-    fun prestarLibro(libro: Libro){
-        val libro = buscarLibro(libro.id)
+    fun prestarLibro(id: Int){
+        val libro = buscarLibro(id)
 
         if (libro != null){
             if (libro.estado == Estado.DISPONIBLE){
@@ -31,8 +48,8 @@ class GestorBiblioteca {
 
     }
 
-    fun devolverLibro(libro: Libro){
-        val libro = buscarLibro(libro.id)
+    fun devolverLibro(id: Int){
+        val libro = buscarLibro(id)
 
         if (libro != null){
             if (libro.estado == Estado.PRESTADO){
@@ -47,8 +64,8 @@ class GestorBiblioteca {
 
     }
 
-    fun disponibilidad(libro: Libro){
-        val libro = buscarLibro(libro.id)
+    fun disponibilidad(id: Int){
+        val libro = buscarLibro(id)
 
         if (libro != null) {
             if (libro.estado == Estado.DISPONIBLE){
@@ -61,18 +78,13 @@ class GestorBiblioteca {
         }
     }
 
-    fun mostrarLibros(){
+    fun mostrarCatalogo(){
         consola.mostrarMensaje("--------Catálogo de libros--------")
         catalogo.forEach { println(it) }
-
-        consola.mostrarMensaje("-----------Disponibles------------")
-        mostrarLibrosDisponibles()
-
-        consola.mostrarMensaje("------------Prestados-------------")
-        mostrarLibrosPrestados()
     }
 
-    private fun mostrarLibrosPrestados(){
+    fun mostrarLibrosPrestados(){
+        consola.mostrarMensaje("------------Prestados-------------")
         catalogo.forEach { libro ->
             if (libro.estado == Estado.PRESTADO){
                 println(libro)
@@ -80,12 +92,19 @@ class GestorBiblioteca {
         }
     }
 
-    private fun mostrarLibrosDisponibles(){
+    fun mostrarLibrosDisponibles(){
+        consola.mostrarMensaje("-----------Disponibles------------")
         catalogo.forEach { libro ->
             if (libro.estado == Estado.DISPONIBLE){
                 println(libro)
             }
         }
+    }
+
+    fun mostraTodo(){
+        mostrarCatalogo()
+        mostrarLibrosDisponibles()
+        mostrarLibrosPrestados()
     }
 
 }
