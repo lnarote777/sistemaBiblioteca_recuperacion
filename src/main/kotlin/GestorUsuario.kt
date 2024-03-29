@@ -11,6 +11,8 @@ class GestorUsuario {
         val usuario = Usuario(id, nombre)
         usuarios.add(usuario)
 
+        consola.mostrarMensaje("Usuario añadido correctamente")
+
         return usuario
     }
 
@@ -20,9 +22,9 @@ class GestorUsuario {
         usuarios.forEach { println("Usuario: id -> ${it.id}, nombre ->${it.nombre}") }
     }
 
-    fun usuarioNuevo(): Boolean {
+    fun usuarioExistente(): Boolean {
         while (true) {
-            consola.mostrarMensaje("Usuario nuevo? (s/n)")
+            consola.mostrarMensaje("Usuario existente? (s/n)")
             val respuesta = consola.respuesta()
 
             if (respuesta == "s") {
@@ -30,7 +32,7 @@ class GestorUsuario {
             } else if (respuesta == "n") {
                 return false
             } else {
-                consola.mostrarMensaje("respuesta inválida. Por favor ingrese 's' para si y 'n' para no.")
+                consola.mostrarMensaje("Respuesta inválida. Por favor ingrese 's' para si o 'n' para no.")
             }
         }
     }

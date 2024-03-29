@@ -24,32 +24,31 @@ class Menu(val biblioteca : GestorBiblioteca){
                 "3" -> {
                     biblioteca.mostrarLibrosDisponibles()
                     val id = consola.pedirId()
-                    if (gestorUsuario.usuarioNuevo()){
-                        val usuario = gestorUsuario.agregarUsuario()
-                        biblioteca.prestarLibro(id, usuario)
-                    }else{
+                    if (gestorUsuario.usuarioExistente()){
                         gestorUsuario.mostrarUsuarios()
                         val idUsuario = consola.pedirId()
                         val usuario = gestorUsuario.buscarUsuario(idUsuario)
                         if (usuario != null) {
                             biblioteca.prestarLibro(id, usuario)
                         }
-
+                    }else{
+                        val usuario = gestorUsuario.agregarUsuario()
+                        biblioteca.prestarLibro(id, usuario)
                     }
 
                 }
                 "4" -> {
                     biblioteca.mostrarLibrosPrestados()
                     val id = consola.pedirId()
-                    if (gestorUsuario.usuarioNuevo()){
-                        consola.mostrarMensaje("No tiene libros para devolver.")
-                    }else{
+                    if (gestorUsuario.usuarioExistente()){
                         gestorUsuario.mostrarUsuarios()
                         val idUsuario = consola.pedirId()
                         val usuario = gestorUsuario.buscarUsuario(idUsuario)
                         if (usuario != null) {
                             biblioteca.devolverLibro(id, usuario)
                         }
+                    }else{
+                        consola.mostrarMensaje("No tiene libros para devolver.")
                     }
                 }
                 "5" -> {

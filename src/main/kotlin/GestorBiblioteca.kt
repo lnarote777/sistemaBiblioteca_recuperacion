@@ -42,6 +42,7 @@ class GestorBiblioteca {
 
                 usuario.agregarLibroPrestado(libro)
                 prestamos.registrarPrestamo(libro, usuario)
+                consola.mostrarMensaje("Libro prestado")
             }else{
                 consola.mostrarMensaje("El libro: '${libro.titulo}' ya está prestado.")
             }
@@ -60,6 +61,7 @@ class GestorBiblioteca {
 
                 usuario.eliminarLibroPrestado(libro)
                 prestamos.devolverLibro(libro, usuario)
+                consola.mostrarMensaje("Libro devuelto")
             }else{
                 consola.mostrarMensaje("El libro: '${libro.titulo}' no ha sido prestado todavía.")
             }
