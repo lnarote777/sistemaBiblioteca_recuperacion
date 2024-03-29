@@ -2,14 +2,14 @@ package org.example
 
 class Usuario(val id: Int, val nombre: String) {
 
-    private val listaPrestamos = mutableListOf<Libro>()
+    private val listaPrestamos = mutableListOf<ElementoBiblioteca>()
 
-    fun agregarLibroPrestado(libro: Libro){
-        listaPrestamos.add(libro)
+    fun agregarElementoPrestado(elemento: ElementoBiblioteca){
+        listaPrestamos.add(elemento)
     }
 
-    fun eliminarLibroPrestado(libro: Libro){
-        listaPrestamos.remove(libro)
+    fun eliminarElementoPrestado(elemento: ElementoBiblioteca){
+        listaPrestamos.remove(elemento)
     }
 
     fun consultarPrestamos(){

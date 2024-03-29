@@ -19,39 +19,97 @@ object GestorConsola {
     }
 
     fun pedirAutor(): String {
-        mostrarMensaje("Autor:")
-        val autor = respuesta()
-        return autor
+        while (true){
+            mostrarMensaje("Autor:")
+            val autor = respuesta()
+
+            if (autor.isNullOrBlank()){
+                mostrarMensaje("El autor no puede estar en blanco.")
+            }else{
+                return autor
+            }
+        }
     }
 
     fun pedirTematica(): String {
-        mostrarMensaje("Temática:")
-        val tematica = respuesta()
-        return tematica
+        while (true){
+            mostrarMensaje("Temática:")
+            val tematica = respuesta()
+
+            if (tematica.isNullOrBlank()){
+                mostrarMensaje("Indique la temática por favor.")
+            }else{
+                return tematica
+            }
+        }
+
     }
 
     fun pedirPublicacion(): Int {
-        mostrarMensaje("Año de publicación:")
-        val publicacion = respuesta().toInt()
-        return publicacion
+        while (true){
+            mostrarMensaje("Año de publicación:")
+            val publicacion = respuesta()
+
+            if (publicacion !in ("1".."2024")){
+                mostrarMensaje("El año de publicación debe estar entre el año 1 y el 2024.")
+            }else {
+                return publicacion.toInt()
+            }
+        }
     }
 
     fun pedirTitulo(): String {
-        mostrarMensaje("Título:")
-        val titulo = respuesta()
-        return titulo
+        while (true) {
+            mostrarMensaje("Título:")
+            val titulo = respuesta()
+
+            if (titulo.isNullOrBlank()){
+                mostrarMensaje("El título no puede estar en blanco.")
+            }else{
+                return titulo
+            }
+        }
     }
 
     fun pedirId(): Int {
-        mostrarMensaje("Ingrese el identificador:")
-        val id = pedirOpcion().toInt()
-        return id
+        while (true) {
+            mostrarMensaje("Ingrese el identificador:")
+            val id = pedirOpcion()
+
+            if (!id.all { it.isDigit() }){
+                mostrarMensaje("Introduzca un identificador válido")
+            }else {
+                return id.toInt()
+            }
+        }
     }
 
     fun pedirNombreUsuario(): String{
-        mostrarMensaje("Nombre usuario:")
-        val nombre = respuesta()
-        return nombre
+        while (true) {
+            mostrarMensaje("Nombre usuario:")
+            val nombre = respuesta()
+
+            if (nombre.isNullOrBlank()) {
+                mostrarMensaje("Ingrese un nombre para el usuario por favor.")
+            } else {
+                return nombre
+            }
+        }
+    }
+
+    fun pedirElemento(): String{
+        while (true) {
+            mostrarMensaje("")
+            mostrarMensaje("¿Que tipo de elemento quiere agregar?")
+            mostrarMensaje("1. Libro\n2. DVD\n3. Revista")
+            val opcion = pedirOpcion()
+
+            if (opcion != "1" || opcion != "2" || opcion != "3"){
+                mostrarMensaje("Opcion inválida")
+            }else{
+                return opcion
+            }
+        }
     }
 }
 

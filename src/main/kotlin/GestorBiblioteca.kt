@@ -1,29 +1,51 @@
 package org.example
 
-class GestorBiblioteca {
-    private val catalogo = mutableListOf<Libro>(Libro(5, "Alicia en el país de las maravillas", "Lewis Carroll", 1865, "Fantasía"),
-        Libro(890, "Bruma Roja", "Lucía G. Sobrado", 2023, "Fantasía")) //Para hacer las pruebas
-    private val consola = GestorConsola
-    private val prestamos = RegistroPrestamos()
+import java.io.Console
 
-    fun agregarLibroCatalogo(){
+class GestorBiblioteca(
+    private val catalogo: IGestorCatalogo,
+    private val consola: GestorConsola,
+    private val gestorPrestamos: IGestorPrestamos
+){
+
+
+    fun agregarElementoCatalogo(){
         val id = UtilidadesBiblioteca.generarId()
+        val elemento = consola.pedirElemento()
         val titulo = consola.pedirTitulo()
-        val autor = consola.pedirAutor()
-        val tematica = consola.pedirTematica()
         val publicacion = consola.pedirPublicacion()
 
+        when (elemento){
+            "1" -> {
+                val autor = consola.pedirAutor()
+                val tematica = consola.pedirTematica()
+                val libro = Libro(id, titulo, autor, publicacion, tematica)
+                catalogo.lista.add(libro)
 
-        val libro = Libro(id, titulo, autor, publicacion, tematica)
-        catalogo.add(libro)
+                consola.mostrarMensaje("Libro agregado correctamente.")
+            }
+            "2" -> {
+                val dvd = Dvd(id, titulo, publicacion)
+                catalogo.lista.add(dvd)
 
-        consola.mostrarMensaje("Libro agregado correctamente.")
+                consola.mostrarMensaje("DVD agregado correctamente.")
+            }
+            "3" -> {
+                val tematica = consola.pedirTematica()
+                val revista = Revista(id, titulo, publicacion, tematica)
+                catalogo.lista.add(revista)
+
+                consola.mostrarMensaje("Revista agregado correctamente.")
+            }
+            else -> consola.mostrarMensaje("Opción no válida")
+        }
+
     }
 
-    fun eliminarLibroCatalogo(id: Int){
-        val libro = buscarLibro(id)
-        if (libro != null){
-            catalogo.remove(libro)
+    fun eliminarElementoCatalogo(id: Int){
+        val elemento = buscarElemento(id)
+        if (elemento != null){
+            catalogo.lista.remove(elemento)
             consola.mostrarMensaje("Libro eliminado correctamente.")
         }else{
             consola.mostrarMensaje("No se encontró el libro con id: $id")
@@ -31,87 +53,58 @@ class GestorBiblioteca {
 
     }
 
-    fun buscarLibro(id: Int) = catalogo.find { libro: Libro -> libro.id == id }
+    fun buscarElemento(id: Int) = catalogo.lista.find { elemento: ElementoBiblioteca -> elemento.id == id }
 
-    fun prestarLibro(id: Int, usuario: Usuario){
-        val libro = buscarLibro(id)
+    fun prestarElemento(id: Int, usuario: Usuario){
+        val elemento = buscarElemento(id)
 
-        if (libro != null){
-            if (libro.estado == Estado.DISPONIBLE){
-                libro.estado = Estado.PRESTADO
+        if (elemento != null && elemento is Prestable){
 
-                usuario.agregarLibroPrestado(libro)
-                prestamos.registrarPrestamo(libro, usuario)
-                consola.mostrarMensaje("Libro prestado")
+            if(elemento.prestar()){
+                usuario.agregarElementoPrestado(elemento)
+                gestorPrestamos.registrarPrestamo(elemento, usuario)
+                consola.mostrarMensaje("Elemento prestado")
             }else{
-                consola.mostrarMensaje("El libro: '${libro.titulo}' ya está prestado.")
+                consola.mostrarMensaje("'${elemento.titulo}' ya está prestado.")
             }
+
         }else{
-            consola.mostrarMensaje("No se encontró ningún libro.")
+            consola.mostrarMensaje("Este elemento no se puede prestar.")
         }
 
     }
 
-    fun devolverLibro(id: Int, usuario: Usuario){
-        val libro = buscarLibro(id)
+    fun devolverElemento(id: Int, usuario: Usuario){
+        val elemento = buscarElemento(id)
 
-        if (libro != null){
-            if (libro.estado == Estado.PRESTADO){
-                libro.estado = Estado.DISPONIBLE
+        if (elemento != null && elemento is Prestable){
 
-                usuario.eliminarLibroPrestado(libro)
-                prestamos.devolverLibro(libro, usuario)
-                consola.mostrarMensaje("Libro devuelto")
+            if(elemento.devolver()){
+                usuario.eliminarElementoPrestado(elemento)
+                gestorPrestamos.devolucionPrestamos(elemento, usuario)
+                consola.mostrarMensaje("Elemento devuelto")
             }else{
-                consola.mostrarMensaje("El libro: '${libro.titulo}' no ha sido prestado todavía.")
+                consola.mostrarMensaje("'${elemento.titulo}' no ha sido prestado todavía.")
             }
+
         }else{
-            consola.mostrarMensaje("No se encontró ningún libro.")
+            consola.mostrarMensaje("Este elemento no se puede devolver.")
         }
 
     }
 
     fun disponibilidad(id: Int){
-        val libro = buscarLibro(id)
+        val elemento = buscarElemento(id)
 
-        if (libro != null) {
-            if (libro.estado == Estado.DISPONIBLE){
-                consola.mostrarMensaje("El libro: '${libro.titulo}' se encuentra disponible en la biblioteca.")
+        if (elemento != null) {
+            if (elemento.estado == Estado.DISPONIBLE){
+                consola.mostrarMensaje("'${elemento.titulo}' se encuentra disponible en la biblioteca.")
             }else{
-                consola.mostrarMensaje("El libro: '${libro.titulo}' ha sido prestado y aun no se ha devuelto.")
+                consola.mostrarMensaje("'${elemento.titulo}' ha sido prestado y aun no se ha devuelto.")
             }
         }else{
-            consola.mostrarMensaje("No se encuentra ningún libro.")
+            consola.mostrarMensaje("No se encuentra nada.")
         }
-    }
-
-    fun mostrarCatalogo(){
-        consola.mostrarMensaje("--------Catálogo de libros--------")
-        catalogo.forEach { println(it) }
-    }
-
-    fun mostrarLibrosPrestados(){
-        consola.mostrarMensaje("------------Prestados-------------")
-        catalogo.forEach { libro ->
-            if (libro.estado == Estado.PRESTADO){
-                println(libro)
-            }
-        }
-    }
-
-    fun mostrarLibrosDisponibles(){
-        consola.mostrarMensaje("-----------Disponibles------------")
-        catalogo.forEach { libro ->
-            if (libro.estado == Estado.DISPONIBLE){
-                println(libro)
-            }
-        }
-    }
-
-    fun mostraTodo(){
-        mostrarCatalogo()
-        mostrarLibrosDisponibles()
-        mostrarLibrosPrestados()
     }
 
 }

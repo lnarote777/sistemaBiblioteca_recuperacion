@@ -2,9 +2,12 @@ package org.example
 
 fun main() {
 
+    val catalogo = Catalogo()
+
     val consola = GestorConsola
-    val biblioteca = GestorBiblioteca()
-    val menu = Menu(biblioteca)
+    val gestorPrestamos = RegistroPrestamos()
+    val biblioteca = GestorBiblioteca(catalogo, consola, gestorPrestamos)
+    val menu = Menu(biblioteca, gestorPrestamos, catalogo)
 
     try{
         menu.menu()

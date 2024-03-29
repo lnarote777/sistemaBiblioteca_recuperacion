@@ -1,12 +1,10 @@
 package org.example
 
-class Libro(override val id: Int,
-            override val titulo: String,
-            private val autor: String,
-            override val publicacion: Int,
-            private val tematica: String,
-            override var estado: Estado = Estado.DISPONIBLE
-) : ElementoBiblioteca(), Prestable
+class Dvd(override val id: Int,
+          override val titulo: String,
+          override val publicacion: Int,
+          override var estado: Estado = Estado.DISPONIBLE
+): ElementoBiblioteca(), Prestable
 {
 
     override fun prestar(): Boolean {
@@ -30,6 +28,6 @@ class Libro(override val id: Int,
     }
 
     override fun toString(): String {
-        return "Libro - Id: $id, Titulo:$titulo, Autor: $autor, Temática: $tematica"
+        return "DVD - Id: $id, Título: $titulo "
     }
 }

@@ -1,33 +1,31 @@
 package org.example
 
-class RegistroPrestamos {
-    companion object{
-        private val registroPrestamos = mutableMapOf<Int, Usuario>()
-        private val historialPrestamos = mutableListOf<Pair<Int, String>>()
-    }
+class RegistroPrestamos : IGestorPrestamos{
 
+    private val registroPrestamos = mutableMapOf<Int, Usuario>()
+    private val historialPrestamos = mutableListOf<Pair<Int, String>>()
     private val consola = GestorConsola
 
-    fun registrarPrestamo(libro: Libro, usuario: Usuario){
-        registroPrestamos[libro.id] = usuario
-        historialPrestamos.add(Pair(libro.id, "Prestado"))
+    override fun registrarPrestamo(elemento: ElementoBiblioteca, usuario: Usuario){
+        registroPrestamos[elemento.id] = usuario
+        historialPrestamos.add(Pair(elemento.id, "Prestado a ${usuario.nombre}"))
     }
 
-    fun devolverLibro(libro: Libro, usuario: Usuario){
-        historialPrestamos.add(Pair(libro.id, "Devuelto"))
+    override fun devolucionPrestamos(elemento: ElementoBiblioteca, usuario: Usuario){
+        historialPrestamos.add(Pair(elemento.id, "Devuelto por ${usuario.nombre}"))
     }
 
-    fun historialLibro(libro: Libro) {
-        val historial = historialPrestamos.filter { it.first == libro.id }
+    override fun historialLibro(elemento: ElementoBiblioteca) {
+        val historial = historialPrestamos.filter { it.first == elemento.id }
         historial.forEach { println(it) }
     }
 
-    fun historialUsuario(usuario: Usuario){
-        val librosPrestados = registroPrestamos.filterValues { it.id == usuario.id }.keys
-        if (librosPrestados.isNotEmpty()) {
+    override fun historialUsuario(usuario: Usuario){
+        val elementosPrestados = registroPrestamos.filterValues { it.id == usuario.id }.keys
+        if (elementosPrestados.isNotEmpty()) {
             consola.mostrarMensaje("Historial del usuario con ID ${usuario.id}:")
-            for (libroId in librosPrestados) {
-                val historial = historialPrestamos.filter { it.first == libroId }
+            for (elementoId in elementosPrestados) {
+                val historial = historialPrestamos.filter { it.first == elementoId }
                 historial.forEach { println(it) }
             }
         } else {
