@@ -1,9 +1,12 @@
 package org.example
 
 class Menu(val biblioteca : GestorBiblioteca){
-    val consola = GestorConsola
-    fun mostrarMenu(){
-        consola.mostrarMensaje("1. Agregar libro\n2. Eliminar libro\n3. Prestar libro\n4. Devolver libro\n5. Comprobar disponibilidad libro\n6. Mostrar catálogo\n0. Salir")
+    private val consola = GestorConsola
+    private val gestorUsuario = GestorUsuario()
+    private val registroPrestamos = RegistroPrestamos()
+
+    private fun mostrarMenu(){
+        consola.mostrarMensaje("1. Agregar libro\n2. Eliminar libro\n3. Prestar libro\n4. Devolver libro\n5. Comprobar disponibilidad libro\n6. Mostrar catálogo\n7. Mostrar prestamos usuario\n8. Mostrar historial prestamos libro\n9. Mostrar historial prestamos usuario\n0. Salir")
     }
 
     fun menu(){
@@ -21,12 +24,33 @@ class Menu(val biblioteca : GestorBiblioteca){
                 "3" -> {
                     biblioteca.mostrarLibrosDisponibles()
                     val id = consola.pedirId()
-                    biblioteca.prestarLibro(id, )
+                    if (gestorUsuario.usuarioNuevo()){
+                        val usuario = gestorUsuario.agregarUsuario()
+                        biblioteca.prestarLibro(id, usuario)
+                    }else{
+                        gestorUsuario.mostrarUsuarios()
+                        val idUsuario = consola.pedirId()
+                        val usuario = gestorUsuario.buscarUsuario(idUsuario)
+                        if (usuario != null) {
+                            biblioteca.prestarLibro(id, usuario)
+                        }
+
+                    }
+
                 }
                 "4" -> {
                     biblioteca.mostrarLibrosPrestados()
                     val id = consola.pedirId()
-                    biblioteca.devolverLibro(id)
+                    if (gestorUsuario.usuarioNuevo()){
+                        consola.mostrarMensaje("No tiene libros para devolver.")
+                    }else{
+                        gestorUsuario.mostrarUsuarios()
+                        val idUsuario = consola.pedirId()
+                        val usuario = gestorUsuario.buscarUsuario(idUsuario)
+                        if (usuario != null) {
+                            biblioteca.devolverLibro(id, usuario)
+                        }
+                    }
                 }
                 "5" -> {
                     biblioteca.mostrarCatalogo()
@@ -35,6 +59,27 @@ class Menu(val biblioteca : GestorBiblioteca){
                 }
                 "6" -> {
                     biblioteca.mostraTodo()
+                }
+                "7" -> {
+                    gestorUsuario.mostrarUsuarios()
+                    val id = consola.pedirId()
+                    gestorUsuario.buscarUsuario(id)?.consultarPrestamos()
+                }
+                "8" -> {
+                    biblioteca.mostrarCatalogo()
+                    val id = consola.pedirId()
+                    val libro = biblioteca.buscarLibro(id)
+                    if (libro != null) {
+                        registroPrestamos.historialLibro(libro)
+                    }
+                }
+                "9" -> {
+                    gestorUsuario.mostrarUsuarios()
+                    val id = consola.pedirId()
+                    val usuario = gestorUsuario.buscarUsuario(id)
+                    if (usuario != null) {
+                        registroPrestamos.historialUsuario(usuario)
+                    }
                 }
                 "0" -> break
                 else -> consola.mostrarMensaje("Opcion no válida")

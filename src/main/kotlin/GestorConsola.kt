@@ -43,7 +43,7 @@ object GestorConsola {
     }
 
     fun pedirId(): Int {
-        mostrarMensaje("Ingrese el id del libro")
+        mostrarMensaje("Ingrese el identificador:")
         val id = pedirOpcion().toInt()
         return id
     }

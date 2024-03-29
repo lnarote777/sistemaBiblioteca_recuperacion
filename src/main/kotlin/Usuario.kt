@@ -2,7 +2,7 @@ package org.example
 
 class Usuario(val id: Int, val nombre: String) {
 
-    val listaPrestamos = mutableListOf<Libro>()
+    private val listaPrestamos = mutableListOf<Libro>()
 
     fun agregarLibroPrestado(libro: Libro){
         listaPrestamos.add(libro)

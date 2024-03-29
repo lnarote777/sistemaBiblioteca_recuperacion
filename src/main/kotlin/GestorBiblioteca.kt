@@ -1,7 +1,8 @@
 package org.example
 
 class GestorBiblioteca {
-    private val catalogo = mutableListOf<Libro>()
+    private val catalogo = mutableListOf<Libro>(Libro(5, "Alicia en el país de las maravillas", "Lewis Carroll", 1865, "Fantasía"),
+        Libro(890, "Bruma Roja", "Lucía G. Sobrado", 2023, "Fantasía")) //Para hacer las pruebas
     private val consola = GestorConsola
     private val prestamos = RegistroPrestamos()
 
