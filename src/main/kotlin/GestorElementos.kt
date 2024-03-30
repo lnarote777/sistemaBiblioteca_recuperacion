@@ -28,4 +28,12 @@ class GestorElementos<T> {
      */
     fun buscarElemento(predicate: (T) -> Boolean ) = listaElementos.find(predicate)
 
+    fun filtrarPorCriterio(elemento: T, criterio: (elemento: T) -> Boolean): T? {
+        val elementoEncontrado = listaElementos.find { criterio(it) && it == elemento }
+        if (elementoEncontrado == null) {
+            consola.mostrarMensaje("No se encontró ningún elemento")
+        }
+        return elementoEncontrado
+    }
+
 }
