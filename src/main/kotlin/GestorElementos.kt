@@ -28,6 +28,12 @@ class GestorElementos<T> {
      */
     fun buscarElemento(predicate: (T) -> Boolean ) = listaElementos.find(predicate)
 
+    /**
+     * Filtra elementos de la lista según un criterio específico.
+     * @param elemento El elemento que se usará para aplicar el criterio de búsqueda.
+     * @param criterio El predicado utilizado para filtrar los elementos.
+     * @return El primer elemento encontrado que cumple con el criterio especificado, o null si no se encontró ningún elemento.
+     */
     fun filtrarPorCriterio(elemento: T, criterio: (elemento: T) -> Boolean): T? {
         val elementoEncontrado = listaElementos.find { criterio(it) && it == elemento }
         if (elementoEncontrado == null) {
