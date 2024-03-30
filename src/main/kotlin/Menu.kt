@@ -7,10 +7,17 @@ class Menu(
 {
     private val consola = GestorConsola
     private val gestorUsuario = GestorUsuario()
+
+    /**
+     * Muestra el menú de opciones disponibles para el sistema de gestión de una biblioteca.
+     */
     private fun mostrarMenu(){
-        consola.mostrarMensaje("1. Agregar libro\n2. Eliminar libro\n3. Prestar libro\n4. Devolver libro\n5. Comprobar disponibilidad libro\n6. Mostrar catálogo\n7. Mostrar prestamos usuario\n8. Mostrar historial prestamos libro\n9. Mostrar historial prestamos usuario\n0. Salir")
+        consola.mostrarMensaje("1. Agregar elemento\n2. Eliminar elemento\n3. Prestar elemento\n4. Devolver elemento\n5. Comprobar disponibilidad elemento\n6. Mostrar catálogo\n7. Mostrar prestamos usuario\n8. Mostrar historial prestamos elemento\n9. Mostrar historial prestamos usuario\n0. Salir")
     }
 
+    /**
+     * Función que representa el menú de opciones para el sistema de gestión de una biblioteca.
+     */
     fun menu(){
         while (true){
             consola.mostrarMensaje("")

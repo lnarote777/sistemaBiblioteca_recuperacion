@@ -1,5 +1,8 @@
 package org.example
 
+/**
+ * Función principal del programa
+ */
 fun main() {
 
     val catalogo = Catalogo()

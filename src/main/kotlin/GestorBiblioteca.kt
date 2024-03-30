@@ -8,7 +8,9 @@ class GestorBiblioteca(
     private val gestorPrestamos: IGestorPrestamos
 ){
 
-
+    /**
+     * Agrega un elemento al catálogo de la biblioteca según la opción seleccionada por el usuario.
+     */
     fun agregarElementoCatalogo(){
         val id = UtilidadesBiblioteca.generarId()
         val elemento = consola.pedirElemento()
@@ -42,6 +44,10 @@ class GestorBiblioteca(
 
     }
 
+    /**
+     * Elimina un elemento del catálogo de la biblioteca según su ID.
+     * @param id El ID del elemento a eliminar.
+     */
     fun eliminarElementoCatalogo(id: Int){
         val elemento = buscarElemento(id)
         if (elemento != null){
@@ -53,8 +59,18 @@ class GestorBiblioteca(
 
     }
 
+    /**
+     * Busca un elemento en el catálogo de la biblioteca según su ID.
+     * @param id El ID del elemento a buscar.
+     * @return El elemento encontrado, o null si no se encontró ningún elemento con el ID especificado.
+     */
     fun buscarElemento(id: Int) = catalogo.lista.find { elemento: ElementoBiblioteca -> elemento.id == id }
 
+    /**
+     * Presta un elemento de la biblioteca a un usuario.
+     * @param id El ID del elemento a prestar.
+     * @param usuario El usuario al que se presta el elemento.
+     */
     fun prestarElemento(id: Int, usuario: Usuario){
         val elemento = buscarElemento(id)
 
@@ -74,6 +90,11 @@ class GestorBiblioteca(
 
     }
 
+    /**
+     * Devuelve un elemento prestado por un usuario.
+     * @param id El ID del elemento a devolver.
+     * @param usuario El usuario que devuelve el elemento.
+     */
     fun devolverElemento(id: Int, usuario: Usuario){
         val elemento = buscarElemento(id)
 
@@ -93,6 +114,10 @@ class GestorBiblioteca(
 
     }
 
+    /**
+     * Verifica la disponibilidad de un elemento en la biblioteca.
+     * @param id El ID del elemento a verificar.
+     */
     fun disponibilidad(id: Int){
         val elemento = buscarElemento(id)
 

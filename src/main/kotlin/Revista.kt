@@ -8,6 +8,10 @@ class Revista(override val id: Int,
 ) :ElementoBiblioteca()
 {
 
+    /**
+     * Representación en cadena del elemento.
+     * @return Una cadena que representa una revista.
+     */
     override fun toString(): String {
         return "Revista - Id: $id, Título: $titulo"
     }
