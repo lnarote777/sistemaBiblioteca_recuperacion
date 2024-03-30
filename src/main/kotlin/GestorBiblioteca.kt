@@ -3,7 +3,7 @@ package org.example
 import java.io.Console
 
 class GestorBiblioteca(
-    private val catalogo: IGestorCatalogo,
+    private val gestorElementos: GestorElementos<ElementoBiblioteca>,
     private val consola: GestorConsola,
     private val gestorPrestamos: IGestorPrestamos
 ){
@@ -22,22 +22,22 @@ class GestorBiblioteca(
                 val autor = consola.pedirAutor()
                 val tematica = consola.pedirTematica()
                 val libro = Libro(id, titulo, autor, publicacion, tematica)
-                catalogo.lista.add(libro)
+                gestorElementos.agregarElementoCatalogo(libro)
 
                 consola.mostrarMensaje("Libro agregado correctamente.")
             }
             "2" -> {
                 val dvd = Dvd(id, titulo, publicacion)
-                catalogo.lista.add(dvd)
+                gestorElementos.agregarElementoCatalogo(dvd)
 
                 consola.mostrarMensaje("DVD agregado correctamente.")
             }
             "3" -> {
                 val tematica = consola.pedirTematica()
                 val revista = Revista(id, titulo, publicacion, tematica)
-                catalogo.lista.add(revista)
+                gestorElementos.agregarElementoCatalogo(revista)
 
-                consola.mostrarMensaje("Revista agregado correctamente.")
+                consola.mostrarMensaje("Revista agregada correctamente.")
             }
             else -> consola.mostrarMensaje("Opción no válida")
         }
@@ -49,22 +49,15 @@ class GestorBiblioteca(
      * @param id El ID del elemento a eliminar.
      */
     fun eliminarElementoCatalogo(id: Int){
-        val elemento = buscarElemento(id)
-        if (elemento != null){
-            catalogo.lista.remove(elemento)
+        val elemento = gestorElementos.buscarElemento{it.id == id}
+        if (elemento != null) {
+            gestorElementos.eliminarElementoCatalogo(elemento)
             consola.mostrarMensaje("Libro eliminado correctamente.")
-        }else{
+        } else {
             consola.mostrarMensaje("No se encontró el libro con id: $id")
         }
 
     }
-
-    /**
-     * Busca un elemento en el catálogo de la biblioteca según su ID.
-     * @param id El ID del elemento a buscar.
-     * @return El elemento encontrado, o null si no se encontró ningún elemento con el ID especificado.
-     */
-    fun buscarElemento(id: Int) = catalogo.lista.find { elemento: ElementoBiblioteca -> elemento.id == id }
 
     /**
      * Presta un elemento de la biblioteca a un usuario.
@@ -72,7 +65,7 @@ class GestorBiblioteca(
      * @param usuario El usuario al que se presta el elemento.
      */
     fun prestarElemento(id: Int, usuario: Usuario){
-        val elemento = buscarElemento(id)
+        val elemento = gestorElementos.buscarElemento{it.id == id}
 
         if (elemento != null && elemento is Prestable){
 
@@ -96,7 +89,7 @@ class GestorBiblioteca(
      * @param usuario El usuario que devuelve el elemento.
      */
     fun devolverElemento(id: Int, usuario: Usuario){
-        val elemento = buscarElemento(id)
+        val elemento = gestorElementos.buscarElemento{it.id == id}
 
         if (elemento != null && elemento is Prestable){
 
@@ -119,13 +112,15 @@ class GestorBiblioteca(
      * @param id El ID del elemento a verificar.
      */
     fun disponibilidad(id: Int){
-        val elemento = buscarElemento(id)
+        val elemento = gestorElementos.buscarElemento{it.id == id}
 
         if (elemento != null) {
             if (elemento.estado == Estado.DISPONIBLE){
                 consola.mostrarMensaje("'${elemento.titulo}' se encuentra disponible en la biblioteca.")
-            }else{
+            }else if(elemento is Prestable){
                 consola.mostrarMensaje("'${elemento.titulo}' ha sido prestado y aun no se ha devuelto.")
+            }else{
+                consola.mostrarMensaje("El elemento so esta disponible para prestaos y se encuentra permanentemente en la biblioteca")
             }
         }else{
             consola.mostrarMensaje("No se encuentra nada.")

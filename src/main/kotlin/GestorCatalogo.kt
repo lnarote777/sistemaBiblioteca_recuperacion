@@ -1,8 +1,7 @@
 package org.example
 
-class Catalogo: IGestorCatalogo {
+class GestorCatalogo (val gestorElementos: GestorElementos<ElementoBiblioteca>): IGestorCatalogo {
 
-    override val lista: MutableList<ElementoBiblioteca> = mutableListOf()
     val consola = GestorConsola
 
     /**
@@ -10,7 +9,7 @@ class Catalogo: IGestorCatalogo {
      */
     override fun mostrarCatalogo(){
         consola.mostrarMensaje("--------Catálogo--------")
-        lista.forEach { println(it) }
+        gestorElementos.listaElementos.forEach { println(it) }
     }
 
     /**
@@ -18,7 +17,7 @@ class Catalogo: IGestorCatalogo {
      */
     override fun mostrarElementosPrestados(){
         consola.mostrarMensaje("------------Prestados-------------")
-        lista.forEach { elemento ->
+        gestorElementos.listaElementos.forEach { elemento ->
             if (elemento.estado == Estado.PRESTADO){
                 println(elemento)
             }
@@ -30,7 +29,7 @@ class Catalogo: IGestorCatalogo {
      */
     override fun mostrarElementosDisponibles(){
         consola.mostrarMensaje("-----------Disponibles------------")
-        lista.forEach { elemento ->
+        gestorElementos.listaElementos.forEach { elemento ->
             if (elemento.estado == Estado.DISPONIBLE){
                 println(elemento)
             }

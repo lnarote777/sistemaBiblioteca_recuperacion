@@ -3,7 +3,8 @@ package org.example
 class Menu(
     private val biblioteca : GestorBiblioteca,
     private val registroPrestamos: RegistroPrestamos,
-    private val catalogo: IGestorCatalogo)
+    private val catalogo: IGestorCatalogo,
+    private val gestorElementos: GestorElementos<ElementoBiblioteca>)
 {
     private val consola = GestorConsola
     private val gestorUsuario = GestorUsuario()
@@ -77,7 +78,7 @@ class Menu(
                 "8" -> {
                     catalogo.mostrarCatalogo()
                     val id = consola.pedirId()
-                    val elemento = biblioteca.buscarElemento(id)
+                    val elemento = gestorElementos.buscarElemento{it.id == id}
                     if (elemento != null) {
                         registroPrestamos.historialLibro(elemento)
                     }
